@@ -138,7 +138,8 @@ function touchStart(e) {
     const touchLocation = e.targetTouches[0];
     offsetX = touchLocation.pageX - draggedElement.offsetLeft;
     offsetY = touchLocation.pageY - draggedElement.offsetTop;
-    e.preventDefault();
+    // Prevenir el desplazamiento solo si se ha iniciado el arrastre de una pieza
+    document.addEventListener('touchmove', touchMove, { passive: false });
 }
 
 function touchMove(e) {
@@ -147,8 +148,8 @@ function touchMove(e) {
         draggedElement.style.position = 'absolute';
         draggedElement.style.left = `${touchLocation.pageX - offsetX}px`;
         draggedElement.style.top = `${touchLocation.pageY - offsetY}px`;
+        e.preventDefault(); // Prevenir el desplazamiento mientras se arrastra una pieza
     }
-    e.preventDefault();
 }
 
 function touchEnd(e) {
@@ -172,6 +173,7 @@ function touchEnd(e) {
             draggedElement.style.position = 'static';
         }
         draggedElement = null;
+        document.removeEventListener('touchmove', touchMove); // Permitir el desplazamiento normal una vez que se suelta la pieza
     }
 }
 
