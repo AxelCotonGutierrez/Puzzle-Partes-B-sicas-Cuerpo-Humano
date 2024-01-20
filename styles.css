@@ -1,0 +1,150 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@700&display=swap');
+
+
+* {
+  margin: 0;
+  padding: 0;
+  font-family: 'Nunito';
+}
+
+body {
+  text-align: center;
+  color: #0c4fe1;
+  height: 100%; 
+}
+
+h1 {
+  color: #EABE3F;
+  padding: 50px;
+  font-size: 40px;
+}
+
+.game-container {
+    background-color: none;
+    max-width: 80%;
+    margin: auto;
+    border: 3px solid #EABE3F;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    padding: 50px 0;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden; /* Evitar desbordamiento horizontal en dispositivos móviles */
+  }
+
+.container2 {
+    background-color: none;
+    max-width: 80%;
+    margin: auto;
+    border: 3px solid #EABE3F;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    padding: 50px 0;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden; /* Evitar desbordamiento horizontal en dispositivos móviles */
+  }
+
+  .textosuperior {
+    font-family: "Roboto", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 20px;
+    justify-content: center;
+    align-items: center;
+    color:black;
+    padding-right: 0.5em;
+    padding-left: 0.5em;
+  }
+  .pregunta {
+    font-family: "Roboto", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 40px;
+    justify-content: center;
+    align-items: center;
+    padding-right: 0.5em;
+    padding-left: 0.5em;
+  }
+
+
+.guess-button {
+    background-color: #4285f4;
+    border: 2px solid #000;
+    color: #fff;
+    padding: 20px 20px;
+    font-size: 25px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 20px;
+  }
+  
+  .guess-button:hover {
+    background-color: #3367d6;
+  }
+
+  .msj {
+    font-size: 30px;
+    height: 30px;
+  }
+  #result {
+    font-size: 24px;
+    margin-top: 20px;
+    font-weight: bold;
+  }
+
+#puzzle-board {
+    width: 443px; /* Ancho del tablero */
+    height: 492px; /* Alto del tablero */
+    display: flex;
+    flex-wrap: wrap; /* Permite múltiples filas */
+    justify-content: space-between; /* Distribuye los slots uniformemente */
+    align-items: stretch; /* Ajusta los slots verticalmente */
+    margin-bottom: 10px; /* Espacio debajo del tablero */
+    border: 1px dashed #ddd; /* Visualización del borde para referencia */
+}
+
+.puzzle-pieces-container {
+    display: flex;
+    flex-direction: row; /* Asegura la disposición en fila */
+    justify-content: flex-start; /* Alinea las piezas al inicio del contenedor */
+    align-items: center; /* Centra las piezas verticalmente */
+    width: 100%; /* Asegúrate de que el contenedor tenga suficiente ancho */
+    max-width: 443px; /* Máximo ancho basado en el tamaño del tablero */
+    margin: auto; /* Centra el contenedor si es necesario */
+    flex-wrap: nowrap; /* Evita el ajuste automático a la siguiente línea */
+}
+
+.puzzle-piece, .puzzle-slot {
+    width: calc(443px / 3); /* Ancho de cada pieza/slot */
+    height: calc(492px / 3); /* Alto de cada pieza/slot */
+    box-sizing: border-box;
+    border: 1px solid #ddd;
+}
+
+.puzzle-piece {
+    background-size: 443px 492px; /* Tamaño de fondo ajustado */
+    margin: 2px; /* Ajusta el margen si es necesario */
+   }
+
+.puzzle-slot {
+    background-color: rgba(255, 255, 255, 0.5);
+}
+@media (max-width: 768px) {
+    .container, .container2 {
+      max-width: 80%; /* Ancho completo en dispositivos móviles */
+      flex-wrap: wrap; /* Permitir envolver las imágenes en múltiples líneas */
+    }
+  
+    .guess-button {
+      font-size: 15px;
+      padding: 5x 5px;
+        }
+  
+ 
+    .msj {
+      font-size: 20px;
+     
+    }
+    
+  }
