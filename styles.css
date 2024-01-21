@@ -141,9 +141,13 @@ h1 {
     font-size: 15px;
    
   }
+  .puzzle-pieces-container {
+    justify-content: center; /* Centra las piezas horizontalmente */
+}
   #puzzle-board {
     width: 221.5px; /* 50% del ancho original */
     height: 246px; /* 50% de la altura original */
+    
 }
 
 .puzzle-piece, .puzzle-slot {
@@ -153,5 +157,6 @@ h1 {
 
 .puzzle-piece {
     background-size: 221.5px 246px; /* 50% del tamaño de fondo original */
+    
 }
 }
