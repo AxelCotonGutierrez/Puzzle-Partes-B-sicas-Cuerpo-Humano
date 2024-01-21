@@ -1,7 +1,9 @@
+// Axel Cotón Gutiérrez Copyright 2024
 document.addEventListener('DOMContentLoaded', (event) => {
     initPuzzle();
     document.getElementById('check-button').addEventListener('click', checkPuzzle);
     document.getElementById('next-question').addEventListener('click', resetGame);
+    window.addEventListener('resize', initPuzzle); // Ajustar el juego cuando cambie el tamaño de la ventana
 });
 
 let remainingPieces = []; // Almacenar las piezas restantes
@@ -12,11 +14,23 @@ let offsetY = 0;
 function initPuzzle() {
     const puzzlePieces = document.getElementById('puzzle-pieces');
     const puzzleBoard = document.getElementById('puzzle-board');
+    puzzlePieces.innerHTML = ''; // Limpiar las piezas existentes
+    puzzleBoard.innerHTML = ''; // Limpiar los slots existentes
+
     const imageSrc = 'cuerpo.jpg';
     const numRows = 3;
     const numCols = 3;
-    const pieceWidth = 443 / numCols;
-    const pieceHeight = 492 / numRows;
+    let pieceWidth, pieceHeight;
+
+    // Tamaños ajustados para dispositivos móviles
+    if (window.innerWidth <= 768) {
+        pieceWidth = 221.5 / numCols;
+        pieceHeight = 246 / numRows;
+    } else {
+        pieceWidth = 443 / numCols;
+        pieceHeight = 492 / numRows;
+    }
+
     let pieces = [];
 
     // Crear piezas del puzzle y almacenarlas en un array
@@ -38,10 +52,10 @@ function initPuzzle() {
     // Desordenar y mostrar las primeras piezas
     shuffleArray(pieces);
     for (let i = 0; i < pieces.length; i++) {
-        if (i < 3) { // Muestra las primeras 3 piezas
+        if (i < 3) {
             puzzlePieces.appendChild(pieces[i]);
         } else {
-            remainingPieces.push(pieces[i]); // Almacena las piezas restantes
+            remainingPieces.push(pieces[i]);
         }
     }
 
@@ -57,8 +71,7 @@ function initPuzzle() {
         puzzleBoard.appendChild(slot);
     }
 
-    // Añadir eventos táctiles
-    addTouchEventsToPieces();
+    addTouchEventsToPieces(); // Añadir eventos táctiles a las piezas
 }
 
 function shuffleArray(array) {
@@ -94,6 +107,7 @@ function drop(event) {
 function addNextPiece() {
     const nextPiece = remainingPieces.shift();
     document.getElementById('puzzle-pieces').appendChild(nextPiece);
+    addTouchEventsToPiece(nextPiece); // Añadir eventos táctiles a la nueva pieza
 }
 
 function checkPuzzle() {
@@ -138,8 +152,7 @@ function touchStart(e) {
     const touchLocation = e.targetTouches[0];
     offsetX = touchLocation.pageX - draggedElement.offsetLeft;
     offsetY = touchLocation.pageY - draggedElement.offsetTop;
-    // Prevenir el desplazamiento solo si se ha iniciado el arrastre de una pieza
-    document.addEventListener('touchmove', touchMove, { passive: false });
+    e.preventDefault();
 }
 
 function touchMove(e) {
@@ -148,8 +161,8 @@ function touchMove(e) {
         draggedElement.style.position = 'absolute';
         draggedElement.style.left = `${touchLocation.pageX - offsetX}px`;
         draggedElement.style.top = `${touchLocation.pageY - offsetY}px`;
-        e.preventDefault(); // Prevenir el desplazamiento mientras se arrastra una pieza
     }
+    e.preventDefault();
 }
 
 function touchEnd(e) {
@@ -165,7 +178,6 @@ function touchEnd(e) {
         if (targetSlot && !targetSlot.firstChild) {
             targetSlot.appendChild(draggedElement);
             draggedElement.style.position = 'static';
-
             if (remainingPieces.length > 0) {
                 addNextPiece();
             }
@@ -173,7 +185,6 @@ function touchEnd(e) {
             draggedElement.style.position = 'static';
         }
         draggedElement = null;
-        document.removeEventListener('touchmove', touchMove); // Permitir el desplazamiento normal una vez que se suelta la pieza
     }
 }
 
@@ -186,12 +197,6 @@ function isElementOverlapping(element1, element2) {
              rect1.top > rect2.bottom);
 }
 
-function addNextPiece() {
-    const nextPiece = remainingPieces.shift();
-    document.getElementById('puzzle-pieces').appendChild(nextPiece);
-    addTouchEventsToPiece(nextPiece); // Añadir eventos táctiles a la nueva pieza
-}
-
 function addTouchEventsToPiece(piece) {
     piece.addEventListener('touchstart', touchStart, { passive: false });
     piece.addEventListener('touchmove', touchMove, { passive: false });
@@ -202,16 +207,3 @@ function addTouchEventsToPieces() {
     const pieces = document.querySelectorAll('.puzzle-piece');
     pieces.forEach(addTouchEventsToPiece);
 }
-
-document.addEventListener('touchmove', touchMove, { passive: false });
-
-// Navegaciòn"  
- 
-document.addEventListener('DOMContentLoaded', function() {
-    var menuToggle = document.querySelector('.menu-toggle');
-    var menu = document.querySelector('.menu');
-        
-    menuToggle.addEventListener('click', function() {
-    menu.classList.toggle('active');
-    });
-  });

@@ -146,5 +146,17 @@ h1 {
       font-size: 20px;
      
     }
-    
+    #puzzle-board {
+      width: 221.5px; /* 50% del ancho original */
+      height: 246px; /* 50% de la altura original */
+  }
+
+  .puzzle-piece, .puzzle-slot {
+      width: calc(221.5px / 3); /* 50% del ancho original de cada pieza/slot */
+      height: calc(246px / 3); /* 50% de la altura original de cada pieza/slot */
+  }
+
+  .puzzle-piece {
+      background-size: 221.5px 246px; /* 50% del tamaño de fondo original */
+  }
   }
