@@ -3,33 +3,17 @@ document.addEventListener('DOMContentLoaded', (event) => {
     initPuzzle();
     document.getElementById('check-button').addEventListener('click', checkPuzzle);
     document.getElementById('next-question').addEventListener('click', resetGame);
-    window.addEventListener('resize', initPuzzle); // Ajustar el juego cuando cambie el tamaño de la ventana
 });
 
 let remainingPieces = []; // Almacenar las piezas restantes
 let draggedElement = null; // Variable global para almacenar el elemento arrastrado
-let offsetX = 0;
-let offsetY = 0;
 
 function initPuzzle() {
     const puzzlePieces = document.getElementById('puzzle-pieces');
     const puzzleBoard = document.getElementById('puzzle-board');
-    puzzlePieces.innerHTML = ''; // Limpiar las piezas existentes
-    puzzleBoard.innerHTML = ''; // Limpiar los slots existentes
-
     const imageSrc = 'cuerpo.jpg';
     const numRows = 3;
     const numCols = 3;
-    let pieceWidth, pieceHeight;
-
-    // Tamaños ajustados para dispositivos móviles
-    if (window.innerWidth <= 768) {
-        pieceWidth = 221.5 / numCols;
-        pieceHeight = 246 / numRows;
-    } else {
-        pieceWidth = 443 / numCols;
-        pieceHeight = 492 / numRows;
-    }
 
     let pieces = [];
 
@@ -40,14 +24,29 @@ function initPuzzle() {
             piece.classList.add('puzzle-piece');
             piece.id = 'piece-' + row + '-' + col;
             piece.style.backgroundImage = `url(${imageSrc})`;
-            piece.style.backgroundPosition = `-${col * pieceWidth}px -${row * pieceHeight}px`;
-            piece.style.width = `${pieceWidth}px`;
-            piece.style.height = `${pieceHeight}px`;
-            piece.draggable = true;
-            piece.addEventListener('dragstart', dragStart);
             pieces.push(piece);
         }
     }
+
+    // Añadir temporalmente una pieza al DOM para calcular su tamaño
+    let tempPiece = pieces[0].cloneNode();
+    puzzlePieces.appendChild(tempPiece);
+    let rect = tempPiece.getBoundingClientRect();
+    puzzlePieces.removeChild(tempPiece);
+
+    const pieceWidth = rect.width;
+    const pieceHeight = rect.height;
+
+    // Configurar piezas del puzzle
+    pieces.forEach(piece => {
+        const col = parseInt(piece.id.split('-')[2], 10);
+        const row = parseInt(piece.id.split('-')[1], 10);
+        piece.style.backgroundPosition = `-${col * pieceWidth}px -${row * pieceHeight}px`;
+        piece.style.width = `${pieceWidth}px`;
+        piece.style.height = `${pieceHeight}px`;
+        piece.draggable = true;
+        piece.addEventListener('dragstart', dragStart);
+    });
 
     // Desordenar y mostrar las primeras piezas
     shuffleArray(pieces);
@@ -71,7 +70,8 @@ function initPuzzle() {
         puzzleBoard.appendChild(slot);
     }
 
-    addTouchEventsToPieces(); // Añadir eventos táctiles a las piezas
+    // Añadir eventos táctiles
+    addTouchEventsToPieces();
 }
 
 function shuffleArray(array) {
@@ -107,7 +107,6 @@ function drop(event) {
 function addNextPiece() {
     const nextPiece = remainingPieces.shift();
     document.getElementById('puzzle-pieces').appendChild(nextPiece);
-    addTouchEventsToPiece(nextPiece); // Añadir eventos táctiles a la nueva pieza
 }
 
 function checkPuzzle() {
@@ -146,7 +145,6 @@ function resetGame() {
     initPuzzle();
 }
 
-// Funciones para manejar eventos táctiles
 function touchStart(e) {
     draggedElement = e.target;
     const touchLocation = e.targetTouches[0];
@@ -161,8 +159,8 @@ function touchMove(e) {
         draggedElement.style.position = 'absolute';
         draggedElement.style.left = `${touchLocation.pageX - offsetX}px`;
         draggedElement.style.top = `${touchLocation.pageY - offsetY}px`;
+        e.preventDefault();
     }
-    e.preventDefault();
 }
 
 function touchEnd(e) {
@@ -178,6 +176,7 @@ function touchEnd(e) {
         if (targetSlot && !targetSlot.firstChild) {
             targetSlot.appendChild(draggedElement);
             draggedElement.style.position = 'static';
+
             if (remainingPieces.length > 0) {
                 addNextPiece();
             }
@@ -195,6 +194,12 @@ function isElementOverlapping(element1, element2) {
              rect1.left > rect2.right || 
              rect1.bottom < rect2.top || 
              rect1.top > rect2.bottom);
+}
+
+function addNextPiece() {
+    const nextPiece = remainingPieces.shift();
+    document.getElementById('puzzle-pieces').appendChild(nextPiece);
+    addTouchEventsToPiece(nextPiece); // Añadir eventos táctiles a la nueva pieza
 }
 
 function addTouchEventsToPiece(piece) {
